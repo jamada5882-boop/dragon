@@ -41,3 +41,20 @@
 .dragon-pin {
     border-radius: 15%;
 }
+
+/* ▼▼▼ [추가] 비디오 기본 재생 버튼 숨기기 (모바일 대응) ▼▼▼ */
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+video::-webkit-media-controls-panel {
+    display: none !important;
+}
