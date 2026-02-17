@@ -1,0 +1,43 @@
+/* 핀 컨테이너 */
+.mobile-pins,
+.desktop-pins {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* 공통 핀 스타일 */
+.map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: transparent;
+    z-index: 10;
+    transition: all 0.2s ease-in-out;
+    pointer-events: auto;
+}
+
+/* 데스크톱 기본 크기 */
+.desktop-pins .map-pin {
+    width: 3%;
+    height: 5.5%;
+}
+
+/* 모바일 기본 크기 */
+.mobile-pins .map-pin {
+    width: 6%;
+    height: 3%;
+}
+
+
+.map-pin:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.dragon-pin {
+    border-radius: 15%;
+}

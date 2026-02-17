@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>천하총도 - 세계관 지도</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-stone-900 text-stone-100 font-sans antialiased overflow-hidden w-screen h-screen">
+
+    <div class="relative w-full h-full bg-[#eaddcf]">
+
+        <picture>
+            <source media="(max-width: 767px)" srcset="./image_2.png">
+            <img src="./image_1.png" alt="천하총도" class="w-full h-full block select-none">
+        </picture>
+
+
+        <div class="mobile-pins block md:hidden absolute inset-0">
+            <button class="map-pin dragon-pin" style="top: 38%; left: 52%; width: 13.5%; height: 7.5%;"
+                data-id="0"></button>
+            <button class="map-pin" style="top: 39.5%; left: 26%;" data-id="1"></button>
+            <button class="map-pin" style="top: 42.5%; left: 67.5%;" data-id="2"></button>
+            <button class="map-pin" style="top: 40.5%; left: 82%;" data-id="3"></button>
+            <button class="map-pin" style="top: 46.2%; left: 72.5%;" data-id="4"></button>
+            <button class="map-pin" style="top: 46.8%; left: 65%;" data-id="5"></button>
+            <button class="map-pin" style="top: 52.7%; left: 75.4%;" data-id="6"></button>
+            <button class="map-pin" style="top: 51.8%; left: 51%;" data-id="7"></button>
+            <button class="map-pin" style="top: 52.7%; left: 35.8%;" data-id="8"></button>
+            <button class="map-pin" style="top: 54.5%; left: 58%;" data-id="9"></button>
+            <button class="map-pin" style="top: 50.5%; left: 18%;" data-id="10"></button>
+            <button class="map-pin" style="top: 58.8%; left: 63%;" data-id="11"></button>
+            <button class="map-pin" style="top: 62%; left: 50%;" data-id="12"></button>
+        </div>
+
+
+        <div class="desktop-pins hidden md:block absolute inset-0">
+            <button class="map-pin dragon-pin" style="top: 25.3%; left: 51.3%; width: 7.7%; height: 13.7%;"
+                data-id="0"></button>
+            <button class="map-pin" style="top: 27.8%; left: 34%;" data-id="1"></button>
+            <button class="map-pin" style="top: 34%; left: 61.7%;" data-id="2"></button>
+            <button class="map-pin" style="top: 30%; left: 71%;" data-id="3"></button>
+            <button class="map-pin" style="top: 42%; left: 65%;" data-id="4"></button>
+            <button class="map-pin" style="top: 43.4%; left: 60%;" data-id="5"></button>
+            <button class="map-pin" style="top: 55.6%; left: 66.9%;" data-id="6"></button>
+            <button class="map-pin" style="top: 53.8%; left: 50.78%;" data-id="7"></button>
+            <button class="map-pin" style="top: 55.7%; left: 40.4%;" data-id="8"></button>
+            <button class="map-pin" style="top: 59.5%; left: 55.5%;" data-id="9"></button>
+            <button class="map-pin" style="top: 50.8%; left: 28.5%;" data-id="10"></button>
+            <button class="map-pin" style="top: 68.5%; left: 58.3%;" data-id="11"></button>
+            <button class="map-pin" style="top: 75%; left: 50%;" data-id="12"></button>
+        </div>
+
+    </div>
+
+    <div id="modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-stone-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-all duration-300 border border-stone-600 relative flex flex-col mx-4 md:mx-0">
+            <button id="close-btn"
+                class="absolute top-3 right-3 z-10 bg-black/50 text-white rounded-full p-2 hover:bg-black/80 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <div class="w-full aspect-square bg-stone-900 relative flex-shrink-0">
+                <img id="modal-img" src="" alt="지역 이미지" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[50vh]">
+                <p id="modal-desc" class="text-stone-300 leading-relaxed text-lg"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
