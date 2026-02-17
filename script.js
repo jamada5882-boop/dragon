@@ -1,8 +1,104 @@
 $(document).ready(function () {
 
-    // 1. 데이터 정의
+    // =========================================
+    // [1] BGM 제어 로직
+    // =========================================
+    const bgm = document.getElementById('bgm-audio');
+    const toggleBtn = $('#bgm-toggle');
+    const iconOn = toggleBtn.find('svg:first');
+    const iconOff = toggleBtn.find('svg:last');
+
+    // ★ 기본값: 소리 켜짐 상태 가정
+    let isMuted = false;
+
+    // bgm 로드 체크 및 볼륨 설정
+    if (bgm) {
+        bgm.volume = 0.4;
+    }
+
+    // 토글 버튼 클릭 시
+    toggleBtn.on('click', function () {
+        if (!bgm) return;
+
+        if (bgm.paused) {
+            bgm.play();
+            updateBgmIcon(true);
+        } else {
+            bgm.pause();
+            updateBgmIcon(false);
+        }
+    });
+
+    // 아이콘 UI 업데이트 함수
+    function updateBgmIcon(isPlaying) {
+        if (isPlaying) {
+            iconOn.removeClass('hidden');
+            iconOff.addClass('hidden');
+        } else {
+            iconOn.addClass('hidden');
+            iconOff.removeClass('hidden');
+        }
+    }
+
+
+    // =========================================
+    // [2] 인트로 영상 및 시작 화면 로직
+    // =========================================
+    const introOverlay = $('#intro-overlay');
+    const introVideo = document.getElementById('intro-video');
+    const startScreen = $('#start-screen'); // 입장하기 화면
+    const startBtn = $('#start-btn');       // 입장하기 버튼
+    const skipBtn = $('#skip-intro');
+
+    // ★ [핵심] 입장하기 버튼 클릭 이벤트
+    startBtn.on('click', function () {
+        // 1. 시작 화면 숨기기
+        startScreen.fadeOut(300);
+        // 2. 스킵 버튼 보이기
+        skipBtn.removeClass('hidden');
+
+        // 3. 영상 재생 (소리 켜진 상태)
+        if (introVideo) {
+            introVideo.play();
+        }
+
+        // 4. BGM 재생 (소리 켜진 상태)
+        if (bgm) {
+            bgm.play().then(() => {
+                updateBgmIcon(true);
+            }).catch(e => {
+                console.log("BGM 재생 실패:", e);
+                updateBgmIcon(false);
+            });
+        }
+    });
+
+    // 인트로 종료 (영상 끝 or 스킵)
+    function finishIntro() {
+        introOverlay.fadeOut(1000, function () {
+            $(this).remove();
+        });
+        // (참고: BGM은 이미 재생 중이므로 건드릴 필요 없음)
+    }
+
+    // 영상 끝나면
+    if (introVideo) {
+        introVideo.onended = function () {
+            finishIntro();
+        };
+    }
+
+    // 스킵 누르면
+    skipBtn.on('click', function () {
+        finishIntro();
+    });
+
+
+    // =========================================
+    // [3] 지도 데이터 및 핀 로직 (기존 동일)
+    // =========================================
     const locationData = [
-        { id: 0, img: "0.png", desc: "천하를 호령하는 ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ중심지입니다. 이곳에는 고대 드래곤의 전설이 깃들어 있으며, 무림 맹주가 거주하는 곳으로 알려져 있습니다." },
+        { id: 0, img: "0.png", desc: "천하를 호령하는 중심지입니다. 이곳에는 고대 드래곤의 전설이 깃들어 있으며, 무림 맹주가 거주하는 곳으로 알려져 있습니다." },
         { id: 1, img: "1.png", desc: "서역의 험준한 산맥에 위치한 문파입니다. 일년 내내 눈이 녹지 않는 설산에서 독자적인 검법을 수련합니다." },
         { id: 2, img: "2.png", desc: "황실의 힘이 미치는 제국의 수도입니다. 금의위와 동창이 감시하고 있어 무림인들의 활동이 제약되는 구역입니다." },
         { id: 3, img: "3.png", desc: "동북방의 끝자락, 영험한 기운이 서린 곳입니다. 산삼과 약초가 풍부하며 신비로운 의술이 전해집니다." },
@@ -17,48 +113,39 @@ $(document).ready(function () {
         { id: 12, img: "12.png", desc: "남서쪽의 왕족 가문입니다. 일양지라 불리는 절세의 지법을 가전 무공으로 전승하고 있습니다." }
     ];
 
-    // 2. 핀 클릭 이벤트
     $('.map-pin').on('click', function () {
         const id = $(this).data('id');
         const data = locationData.find(item => item.id == id);
 
         if (data) {
-            // 내용 채우기
             $('#modal-img').attr('src', data.img);
             $('#modal-desc').text(data.desc);
 
-            // 모달 열기 
-            // 주의: fadeIn() 대신 animate opacity를 써야 flex(중앙정렬)가 안 깨집니다.
             $('#modal')
-                .removeClass('hidden') // hidden 제거 (display: flex 상태 됨)
-                .css('opacity', 0)     // 투명도 0에서 시작
+                .removeClass('hidden')
+                .css('opacity', 0)
                 .stop()
-                .animate({ opacity: 1 }, 300); // 0.3초 동안 불투명하게
+                .animate({ opacity: 1 }, 300);
 
-            $('body').css('overflow', 'hidden'); // 스크롤 막기
+            $('body').css('overflow', 'hidden');
         }
     });
 
-    // 3. 모달 닫기 함수
     function closeModal() {
         $('#modal').stop().animate({ opacity: 0 }, 300, function () {
-            // 애니메이션이 끝나면 hidden 클래스 추가
             $(this).addClass('hidden');
         });
-        $('body').css('overflow', 'auto'); // 스크롤 풀기
+        $('body').css('overflow', 'auto');
     }
 
-    // 닫기 버튼 클릭
     $('#close-btn').on('click', closeModal);
 
-    // 배경 클릭 시 닫기
     $('#modal').on('click', function (e) {
         if (e.target === this) {
             closeModal();
         }
     });
 
-    // ESC 키 누르면 닫기
     $(document).on('keydown', function (e) {
         if (e.key === 'Escape') {
             closeModal();

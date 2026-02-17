@@ -13,13 +13,33 @@
 
 <body class="bg-stone-900 text-stone-100 font-sans antialiased overflow-hidden w-screen h-screen">
 
-    <div class="relative w-full h-full bg-[#eaddcf]">
+    <div id="intro-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center">
 
+        <video id="intro-video" class="w-full h-full object-cover" playsinline>
+            <source src="intro.mp4" type="video/mp4">
+        </video>
+
+        <div id="start-screen"
+            class="absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+            <button id="start-btn"
+                class="px-8 py-3 border-2 border-amber-500 text-amber-500 text-xl font-bold rounded hover:bg-amber-500 hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.5)]">
+                세계관 입장하기
+            </button>
+            <p class="mt-4 text-stone-400 text-sm">소리와 함께 재생됩니다.</p>
+        </div>
+
+        <button id="skip-intro"
+            class="hidden absolute bottom-10 right-10 px-6 py-2 border border-white/50 text-white/80 rounded hover:bg-white hover:text-black hover:border-transparent transition-all duration-300 z-50 backdrop-blur-sm">
+            SKIP >>
+        </button>
+    </div>
+
+
+    <div class="relative w-full h-full bg-[#eaddcf]">
         <picture>
             <source media="(max-width: 767px)" srcset="./image_2.png">
             <img src="./image_1.png" alt="천하총도" class="w-full h-full block select-none">
         </picture>
-
 
         <div class="mobile-pins block md:hidden absolute inset-0">
             <button class="map-pin dragon-pin" style="top: 38%; left: 52%; width: 13.5%; height: 7.5%;"
@@ -38,7 +58,6 @@
             <button class="map-pin" style="top: 62%; left: 50%;" data-id="12"></button>
         </div>
 
-
         <div class="desktop-pins hidden md:block absolute inset-0">
             <button class="map-pin dragon-pin" style="top: 25.3%; left: 51.3%; width: 7.7%; height: 13.7%;"
                 data-id="0"></button>
@@ -55,8 +74,8 @@
             <button class="map-pin" style="top: 68.5%; left: 58.3%;" data-id="11"></button>
             <button class="map-pin" style="top: 75%; left: 50%;" data-id="12"></button>
         </div>
-
     </div>
+
 
     <div id="modal"
         class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
@@ -77,6 +96,30 @@
             </div>
         </div>
     </div>
+
+
+    <audio id="bgm-audio" loop>
+        <source src="bgm.mp3" type="audio/mp3">
+    </audio>
+
+    <button id="bgm-toggle"
+        class="fixed bottom-4 right-4 z-40 bg-black/40 text-white/80 p-2 rounded-full hover:bg-black/80 hover:text-white transition-all backdrop-blur-sm border border-white/10 shadow-lg">
+
+        <svg id="icon-on" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+
+        <svg id="icon-off" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+        </svg>
+
+    </button>
 
     <script src="script.js"></script>
 </body>
