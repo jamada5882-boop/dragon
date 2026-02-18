@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>천하총도 - 세계관 지도</title>
+    <title>판타지 용조련사의 용(龍)무협 정복기 - 세계관 지도</title>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,13 +13,13 @@
 
 <body class="bg-stone-900 text-stone-100 font-sans antialiased overflow-hidden w-screen h-screen">
 
-    <div id="intro-overlay" class="fixed inset-0 z-[100] bg-black flex items-center justify-center">
+    <div id="intro-overlay" class="fixed inset-0 z-[300] bg-black flex items-center justify-center">
         <video id="intro-video" class="w-full h-full object-cover" playsinline poster="poster.png">
             <source src="intro.mp4" type="video/mp4">
         </video>
 
         <div id="start-screen"
-            class="absolute inset-0 z-[110] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+            class="absolute inset-0 z-[310] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
             <button id="start-btn"
                 class="px-8 py-3 border-2 border-amber-500 text-amber-500 text-xl font-bold rounded hover:bg-amber-500 hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(245,158,11,0.5)]">
                 세계관 입장하기
@@ -34,16 +34,17 @@
     </div>
 
 
-    <a href="/main" target="_self"
-        class="fixed top-6 right-6 z-40 group flex items-center gap-2 px-6 py-3 bg-stone-900/80 border border-amber-500 text-amber-500 font-bold rounded-lg backdrop-blur-sm hover:bg-amber-500 hover:text-stone-900 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]">
+    <div id="gate-screen" class="fixed inset-0 z-[200] bg-black cursor-pointer">
+        <picture>
+            <source media="(max-width: 767px)" srcset="./cover_mobile.png">
+            <img src="./cover_pc.png" alt="대문" class="w-full h-full object-cover block select-none">
+        </picture>
 
-        <span>대화 시작</span>
-
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
-            fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg>
-    </a>
+        <div
+            class="absolute bottom-10 w-full text-center animate-bounce text-white/80 text-lg font-bold tracking-widest drop-shadow-md pointer-events-none">
+            화면을 터치하여 지도 확인
+        </div>
+    </div>
 
 
     <div class="relative w-full h-full bg-[#eaddcf]">
@@ -67,6 +68,7 @@
             <button class="map-pin" style="top: 50.5%; left: 18%;" data-id="10"></button>
             <button class="map-pin" style="top: 58.8%; left: 63%;" data-id="11"></button>
             <button class="map-pin" style="top: 62%; left: 50%;" data-id="12"></button>
+            <button class="map-pin" style="top: 54.1%; left: 20%;" data-id="13"></button>
         </div>
 
         <div class="desktop-pins hidden md:block absolute inset-0">
@@ -84,9 +86,19 @@
             <button class="map-pin" style="top: 50.8%; left: 28.5%;" data-id="10"></button>
             <button class="map-pin" style="top: 68.5%; left: 58.3%;" data-id="11"></button>
             <button class="map-pin" style="top: 75%; left: 50%;" data-id="12"></button>
+            <button class="map-pin" style="top: 58.7%; left: 30%;" data-id="13"></button>
         </div>
     </div>
 
+
+    <a href="/main" target="_self"
+        class="fixed top-6 right-6 z-40 group flex items-center gap-2 px-6 py-3 bg-stone-900/80 border border-amber-500 text-amber-500 font-bold rounded-lg backdrop-blur-sm hover:bg-amber-500 hover:text-stone-900 transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.6)]">
+        <span>대화 시작</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform"
+            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+    </a>
 
     <div id="modal"
         class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300">
@@ -107,7 +119,6 @@
             </div>
         </div>
     </div>
-
 
     <audio id="bgm-audio" loop>
         <source src="bgm.mp3" type="audio/mp3">

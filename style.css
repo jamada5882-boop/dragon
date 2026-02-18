@@ -25,14 +25,17 @@
 .desktop-pins .map-pin {
     width: 3%;
     height: 5.5%;
+    /* background-color: rgba(255, 255, 0, 0.5) !important;
+    border: 2px solid red !important; */
 }
 
 /* 모바일 기본 크기 */
 .mobile-pins .map-pin {
     width: 6%;
     height: 3%;
+    /* background-color: rgba(255, 255, 0, 0.5) !important;
+    border: 2px solid red !important; */
 }
-
 
 .map-pin:active {
     transform: translate(-50%, -50%) scale(0.95);

@@ -1,25 +1,15 @@
 $(document).ready(function () {
 
-    // =========================================
-    // [1] BGM 제어 로직
-    // =========================================
     const bgm = document.getElementById('bgm-audio');
     const toggleBtn = $('#bgm-toggle');
     const iconOn = toggleBtn.find('svg:first');
     const iconOff = toggleBtn.find('svg:last');
 
-    // ★ 기본값: 소리 켜짐 상태 가정
-    let isMuted = false;
+    // BGM 설정
+    if (bgm) bgm.volume = 0.4;
 
-    // bgm 로드 체크 및 볼륨 설정
-    if (bgm) {
-        bgm.volume = 0.4;
-    }
-
-    // 토글 버튼 클릭 시
     toggleBtn.on('click', function () {
         if (!bgm) return;
-
         if (bgm.paused) {
             bgm.play();
             updateBgmIcon(true);
@@ -29,7 +19,6 @@ $(document).ready(function () {
         }
     });
 
-    // 아이콘 UI 업데이트 함수
     function updateBgmIcon(isPlaying) {
         if (isPlaying) {
             iconOn.removeClass('hidden');
@@ -42,60 +31,51 @@ $(document).ready(function () {
 
 
     // =========================================
-    // [2] 인트로 영상 및 시작 화면 로직
+    // [순서 제어] 영상 -> 대문 -> 지도
     // =========================================
-    const introOverlay = $('#intro-overlay');
+    const introOverlay = $('#intro-overlay'); // 영상 (1단계)
+    const gateScreen = $('#gate-screen');     // 대문 (2단계)
     const introVideo = document.getElementById('intro-video');
-    const startScreen = $('#start-screen'); // 입장하기 화면
-    const startBtn = $('#start-btn');       // 입장하기 버튼
+    const startScreen = $('#start-screen');
+    const startBtn = $('#start-btn');
     const skipBtn = $('#skip-intro');
 
-    // ★ [핵심] 입장하기 버튼 클릭 이벤트
+    // 1. [입장하기] 클릭 -> 영상/BGM 재생
     startBtn.on('click', function () {
-        // 1. 시작 화면 숨기기
         startScreen.fadeOut(300);
-        // 2. 스킵 버튼 보이기
         skipBtn.removeClass('hidden');
 
-        // 3. 영상 재생 (소리 켜진 상태)
-        if (introVideo) {
-            introVideo.play();
-        }
-
-        // 4. BGM 재생 (소리 켜진 상태)
+        if (introVideo) introVideo.play();
         if (bgm) {
-            bgm.play().then(() => {
-                updateBgmIcon(true);
-            }).catch(e => {
-                console.log("BGM 재생 실패:", e);
-                updateBgmIcon(false);
-            });
+            bgm.play().then(() => updateBgmIcon(true))
+                .catch(() => updateBgmIcon(false));
         }
     });
 
-    // 인트로 종료 (영상 끝 or 스킵)
+    // 2. 영상 종료(혹은 스킵) -> 대문(Gate) 보여주기
     function finishIntro() {
+        // 영상을 서서히 투명하게 만듦
         introOverlay.fadeOut(1000, function () {
-            $(this).remove();
+            $(this).remove(); // 영상 레이어 삭제
         });
-        // (참고: BGM은 이미 재생 중이므로 건드릴 필요 없음)
     }
 
-    // 영상 끝나면
     if (introVideo) {
-        introVideo.onended = function () {
-            finishIntro();
-        };
+        introVideo.onended = function () { finishIntro(); };
     }
+    skipBtn.on('click', function () { finishIntro(); });
 
-    // 스킵 누르면
-    skipBtn.on('click', function () {
-        finishIntro();
+
+    // 3. 대문 클릭 -> 지도(Main) 보여주기
+    gateScreen.on('click', function () {
+        $(this).fadeOut(500, function () {
+            $(this).remove(); // 대문 레이어 삭제 -> 맨 아래 있던 지도가 드러남
+        });
     });
 
 
     // =========================================
-    // [3] 지도 데이터 및 핀 로직 (기존 동일)
+    // [지도] 핀 & 모달 로직
     // =========================================
     const locationData = [
         { id: 0, img: "0.png", desc: "천하를 호령하는 중심지입니다. 이곳에는 고대 드래곤의 전설이 깃들어 있으며, 무림 맹주가 거주하는 곳으로 알려져 있습니다." },
@@ -110,7 +90,8 @@ $(document).ready(function () {
         { id: 9, img: "9.png", desc: "도가의 이치를 무공으로 승화시킨 문파입니다. 태극의 이치를 깨달아 부드러움으로 강함을 제압합니다." },
         { id: 10, img: "10.png", desc: "서장 깊은 곳에 위치한 라마교의 성지입니다. 중원과는 다른 기이하고 강력한 무공을 사용한다고 전해집니다." },
         { id: 11, img: "11.png", desc: "맹수를 부리고 독을 다루는 남쪽의 세력입니다. 숲이 우거져 지형을 모르면 살아나오기 힘듭니다." },
-        { id: 12, img: "12.png", desc: "남서쪽의 왕족 가문입니다. 일양지라 불리는 절세의 지법을 가전 무공으로 전승하고 있습니다." }
+        { id: 12, img: "12.png", desc: "남서쪽의 왕족 가문입니다. 일양지라 불리는 절세의 지법을 가전 무공으로 전승하고 있습니다." },
+        { id: 13, img: "13.png", desc: "남서쪽의 왕족 가문입니다. 일양지라 불리는 절세의 지법을 가전 무공으로 전승하고 있습니다." }
     ];
 
     $('.map-pin').on('click', function () {
@@ -121,12 +102,7 @@ $(document).ready(function () {
             $('#modal-img').attr('src', data.img);
             $('#modal-desc').text(data.desc);
 
-            $('#modal')
-                .removeClass('hidden')
-                .css('opacity', 0)
-                .stop()
-                .animate({ opacity: 1 }, 300);
-
+            $('#modal').removeClass('hidden').css('opacity', 0).stop().animate({ opacity: 1 }, 300);
             $('body').css('overflow', 'hidden');
         }
     });
@@ -139,17 +115,10 @@ $(document).ready(function () {
     }
 
     $('#close-btn').on('click', closeModal);
-
     $('#modal').on('click', function (e) {
-        if (e.target === this) {
-            closeModal();
-        }
+        if (e.target === this) closeModal();
     });
-
     $(document).on('keydown', function (e) {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
+        if (e.key === 'Escape') closeModal();
     });
-
 });
